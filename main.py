@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-# Test4
+
 class Food:
     def __init__(self, world, food_id, x, y, quantity=1):
         self.food_id = food_id
@@ -109,8 +109,6 @@ class World:
         x, y = end_slot
         return self.is_on_the_board(x, y) and self.there_is_no_player(x, y)
 
-    # attention au changement de convention. parfois tu passes un couple (x,y) en 1 paramètre, parfois deux paramètres x et y
-    # c'est pas cohérent
     def there_is_food(self, end_slot):
         x, y = end_slot
         cell_content = self.board[y][x]
@@ -152,7 +150,6 @@ class WorldPrinter:
 
 
 def create_world(width, height, food_quantity, nb_players):
-    # pourrait être mis dans la Classe World. Mais à débattre
     world = World(width, height)
     world.add_food(food_quantity)  # World.add_food(world, food_quantity)
     world.add_random_players(nb_players)
