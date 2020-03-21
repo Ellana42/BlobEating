@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-# Test 
+# Test2
 class Food:
     def __init__(self, world, food_id, x, y, quantity=1):
         self.food_id = food_id
