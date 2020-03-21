@@ -44,10 +44,7 @@ for j in range(10):
 
 
 def tile_is_empty(x, y, board):
-    if board[y][x] == 0:
-        return True
-    else:
-        return False
+    return board[y][x] == 0:
 
 
 def random_empty_tile(board):
