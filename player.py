@@ -18,7 +18,7 @@ class Blob:
     def get_blob_id(self):
         return self.blob_id
 
-    def where_is_arrival(self, direction, x, y):
+    def where_is_arrival(self, direction):
         if direction not in "lrud":
             return None
         x, y = self.x, self.y
@@ -28,5 +28,5 @@ class Blob:
     def move(self, x, y):
         self.x, self.y = x, y
 
-    def eat(self, food):
+    def eats(self, food):
         self.inventory += food.get_quantity()

@@ -3,7 +3,7 @@ from player import Food, Blob
 
 
 class World:
-    def __init__(self, width, height):
+    def __init__(self, width=10, height=10):
         self.width = width
         self.height = height
         self.food = {}
@@ -21,7 +21,7 @@ class World:
         return x in range(self.width) and y in range(self.height)
 
     def there_is_no_player(self, x, y):
-        return (x, y) in self.blobs
+        return (x, y) not in self.blobs
 
     def tile_is_empty(self, x, y):
         return (x, y) not in self.food and (x, y) not in self.blobs
@@ -51,14 +51,20 @@ class World:
             x, y = self.random_empty_tile()
             self.blobs[blob_id] = Blob(x, y, blob_id)
 
+    def create_world(self, food_quantity=5, nb_blobs=4):
+        self.add_food(food_quantity)
+        self.add_blobs(nb_blobs)
+
     # Movement mechanic
 
-    def move_player(self, blob_id, direction):
+    def move_blob(self, blob_id, direction):
         if blob_id not in self.blobs:
-            raise Exception('Incorrect blob id !')
-        current_blob = self.blobs[blob_id]  # I get the corresponding blob
+            raise Exception('Incorrect blob_icon id !')
+        current_blob = self.blobs[blob_id]  # I get the corresponding blob_icon
         x, y = current_blob.where_is_arrival(direction)
         if self.i_can_move(x, y):
             current_blob.move(x, y)
         if self.there_is_food(x, y):
             current_blob.eats(self.food[x, y])
+            del self.food[x, y]
+
