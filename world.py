@@ -2,6 +2,14 @@ from random import randrange
 from player import Food, Blob
 
 
+class Food:
+    def __init__(self, quantity=1):
+        self.quantity = quantity
+
+    def get_quantity(self):
+        return self.quantity
+
+
 class World:
     def __init__(self, width=10, height=10):
         self.width = width
