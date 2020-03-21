@@ -1,4 +1,4 @@
-from random import randrange
+from random import randrange, choice
 from player import Blob
 
 
@@ -29,16 +29,19 @@ class World:
         return x in range(self.width) and y in range(self.height)
 
     def there_is_no_player(self, x, y):
-        return (x, y) not in self.blobs
+        return (x, y) not in self.get_blob_positions()
 
     def tile_is_empty(self, x, y):
-        return (x, y) not in self.food and (x, y) not in self.blobs
+        return (x, y) not in self.food and (x, y) not in self.get_blob_positions()
 
     def i_can_move(self, x, y):
         return self.there_is_no_player(x, y) and self.is_on_the_board(x, y)
 
     def there_is_food(self, x, y):
         return (x, y) in self.food
+
+    def get_blob_positions(self):
+        return [(blob.x, blob.y) for blob in self.blobs.values()]
 
     # World generation
 
@@ -49,6 +52,14 @@ class World:
                 break
         return x, y
 
+    def random_border_tile(self):
+        w, h = self.width, self.height
+        while True:
+            borders = [(0, randrange(h)), (w - 1, randrange(h)), (randrange(w), 0), (randrange(w), h - 1)]
+            x, y = choice(borders)
+            if self.tile_is_empty(x, y):
+                return x, y
+
     def add_food(self, food_quantity):
         for _ in range(food_quantity):
             x, y = self.random_empty_tile()
@@ -56,7 +67,7 @@ class World:
 
     def add_blobs(self, nb_blobs):
         for blob_id in range(nb_blobs):
-            x, y = self.random_empty_tile()
+            x, y = self.random_border_tile()
             self.blobs[blob_id] = Blob(x, y, blob_id)
 
     def create_world(self, food_quantity=5, nb_blobs=4):

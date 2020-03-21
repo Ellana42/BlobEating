@@ -7,7 +7,6 @@ class Display:
 
     def display(self):
         w, h = self.world.get_dimensions()
-        blob_positions = [(blob.x, blob.y) for blob in self.world.blobs.values()]
 
         print('_' * 2 * (w + 1))
         for y in range(h):
@@ -15,11 +14,10 @@ class Display:
             for x in range(w):
                 if (x, y) in self.world.food:
                     print(self.food_icon, end='')
-                elif (x, y) in blob_positions:
+                elif (x, y) in self.world.get_blob_positions():
                     print(self.blob_icon, end='')
                 else:
                     print(self.empty_space, end='')
             print("|")
 
-        print('_' * (w + 1) * 2)
-
+        print('–' * (w + 1) * 2)

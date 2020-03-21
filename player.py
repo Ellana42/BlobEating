@@ -1,5 +1,6 @@
 from random import choice
 
+
 class Blob:
     def __init__(self, x, y, blob_id):
         self.blob_id = blob_id
