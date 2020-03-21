@@ -26,6 +26,6 @@ class Blob:
     def eats(self, food):
         self.inventory += food.get_quantity()
 
-    def direction_choice(self, perception):  # TODO use perception for decision rule
-        direction = choice('l', 'r', 'u', 'd')
+    def direction_choice(self):  # TODO use perception for decision rule
+        direction = choice(['l', 'r', 'u', 'd'])
         return direction

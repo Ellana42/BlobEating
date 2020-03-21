@@ -1,5 +1,5 @@
 from random import randrange
-from player import Food, Blob
+from player import Blob
 
 
 class Food:
