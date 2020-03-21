@@ -14,6 +14,9 @@ class Blob:
     def get_blob_id(self):
         return self.blob_id
 
+    def get_inventory(self):
+        return self.inventory
+
     def where_is_arrival(self, direction):
         if direction not in "lrud":
             return None

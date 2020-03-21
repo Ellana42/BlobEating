@@ -19,3 +19,15 @@ class Game:
                 world.move_blob(blob_id=blob, direction=world.blobs[blob].direction_choice())
             print('Turn : ' + str(turn))
             Display(world).display()
+
+        winners = []
+        current_best_score = 0
+        for blob in world.blobs.values():
+            print('Blob number {} got {} foods'.format(blob.get_blob_id(), blob.get_inventory()))
+            if blob.get_inventory() > current_best_score:
+                winners = [blob.get_blob_id()]
+                current_best_score = blob.get_inventory()
+            elif blob.get_inventory() == current_best_score:
+                winners.append(blob.get_blob_id())
+
+        print('The Blobs with the most food are : ' + str(winners))

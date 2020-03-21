@@ -1,3 +1,3 @@
 from game import Game
 
-Game().game_run()
+Game(food_quantity=35).game_run()

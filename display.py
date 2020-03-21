@@ -1,7 +1,7 @@
 class Display:
     def __init__(self, world):
         self.world = world
-        self.food_icon = ' 1'
+        self.food_icon = ' #'
         self.blob_icon = ' 2'
         self.empty_space = '  '
 
