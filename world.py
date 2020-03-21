@@ -1,5 +1,13 @@
 from random import randrange
-from player import Food, Blob
+from player import Blob
+
+
+class Food:
+    def __init__(self, quantity=1):
+        self.quantity = quantity
+
+    def get_quantity(self):
+        return self.quantity
 
 
 class World:

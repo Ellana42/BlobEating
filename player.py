@@ -1,16 +1,11 @@
-class Food:
-    def __init__(self, quantity=1):
-        self.quantity = quantity
-
-    def get_quantity(self):
-        return self.quantity
-
+from random import choice
 
 class Blob:
     def __init__(self, x, y, blob_id):
         self.blob_id = blob_id
         self.x, self.y = x, y
         self.inventory = 0
+        self.perception = None  # TODO add what the blob perceives
 
     def get_position(self):
         return self.x, self.y
@@ -30,3 +25,7 @@ class Blob:
 
     def eats(self, food):
         self.inventory += food.get_quantity()
+
+    def direction_choice(self):  # TODO use perception for decision rule
+        direction = choice(['l', 'r', 'u', 'd'])
+        return direction
