@@ -3,7 +3,7 @@ from display import Display
 
 
 class Game:
-    def __init__(self, width=10, height=10, food_quantity=4, nb_blobs=4, turns=10):
+    def __init__(self, width=10, height=10, food_quantity=20, nb_blobs=4, turns=10):
         self.width = width
         self.height = height
         self.food_quantity = food_quantity

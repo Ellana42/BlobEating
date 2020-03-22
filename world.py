@@ -43,6 +43,9 @@ class World:
     def get_blob_positions(self):
         return [(blob.x, blob.y) for blob in self.blobs.values()]
 
+    def get_food_locations(self):
+        return self.food.keys()
+
     # World generation
 
     def random_empty_tile(self):
@@ -68,7 +71,7 @@ class World:
     def add_blobs(self, nb_blobs):
         for blob_id in range(nb_blobs):
             x, y = self.random_border_tile()
-            self.blobs[blob_id] = Blob(x, y, blob_id)
+            self.blobs[blob_id] = Blob(x, y, blob_id, self)
 
     def create_world(self, food_quantity=5, nb_blobs=4):
         self.add_food(food_quantity)
