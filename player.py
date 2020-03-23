@@ -1,11 +1,12 @@
 from random import choice
 
+
 class Blob:
     def __init__(self, x, y, blob_id, world):
         self.blob_id = blob_id
         self.x, self.y = x, y
         self.inventory = 0
-        self.perception = world.get_food_locations()  # Blob knows the coordinates of food
+        self.world = world.get_food_locations()  # Blob knows the coordinates of food
 
     def get_position(self):
         return self.x, self.y
@@ -30,7 +31,7 @@ class Blob:
         self.inventory += food.get_quantity()
 
     def direction_choice(self):
-        food_locations = self.perception
+        food_locations = self.world
         a, b = Blob.find_nearest_location(self.x, self.y, food_locations)
         direction = Blob.get_near_to(self.x, self.y, a, b)
         return direction
