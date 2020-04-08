@@ -21,7 +21,8 @@ class Blob:
         if direction not in "lrud":
             return None
         x, y = self.x, self.y
-        dx, dy = {"l": (-1, 0), "r": (1, 0), "u": (0, -1), "d": (0, 1)}[direction]
+        dx, dy = {"l": (-1, 0), "r": (1, 0), "u": (0, -1),
+                  "d": (0, 1)}[direction]
         return x + dx, y + dy
 
     def move(self, x, y):

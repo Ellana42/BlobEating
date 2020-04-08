@@ -14,18 +14,22 @@ class Game:
     def game_run(self):
         self.world.create_world(self.food_quantity, self.nb_blobs)
         Display(self.world).display()
+
         for turn in range(self.turns):
             for blob in self.world.blobs:
-                self.world.move_blob(blob_id=blob, direction=self.world.blobs[blob].direction_choice())
+                self.world.move_blob(
+                    blob_id=blob, direction=self.world.blobs[blob].direction_choice())
             print('Turn : ' + str(turn))
             Display(self.world).display()
+
         self.score_board()
 
     def score_board(self):
         winners = []
         current_best_score = 0
         for blob in self.world.blobs.values():
-            print('Blob number {} got {} foods'.format(blob.get_blob_id(), blob.get_inventory()))
+            print('Blob number {} got {} foods'.format(
+                blob.get_blob_id(), blob.get_inventory()))
             if blob.get_inventory() > current_best_score:
                 winners = [blob.get_blob_id()]
                 current_best_score = blob.get_inventory()

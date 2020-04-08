@@ -58,7 +58,8 @@ class World:
     def random_border_tile(self):
         w, h = self.width, self.height
         while True:
-            borders = [(0, randrange(h)), (w - 1, randrange(h)), (randrange(w), 0), (randrange(w), h - 1)]
+            borders = [(0, randrange(h)), (w - 1, randrange(h)),
+                       (randrange(w), 0), (randrange(w), h - 1)]
             x, y = choice(borders)
             if self.tile_is_empty(x, y):
                 return x, y
@@ -89,4 +90,3 @@ class World:
         if self.there_is_food(x, y):
             current_blob.eats(self.food[x, y])
             del self.food[x, y]
-
