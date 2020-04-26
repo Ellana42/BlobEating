@@ -1,0 +1,4 @@
+Next steps : 
+- Make results exportable
+- Reproduce genetic behaviors (https://www.youtube.com/watch?v=uyUbGatPKpI&t=1223s)
+- Display the eating process prettily
