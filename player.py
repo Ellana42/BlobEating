@@ -37,6 +37,16 @@ class Blob:
         direction = Blob.get_near_to(self.x, self.y, a, b)
         return direction
 
+    def give(self) :
+        pass
+
+    def die(self) :
+        pass
+
+    def reproduce(self):
+        pass
+
+
     @classmethod
     def step_distance(cls, x, y, a, b):
         return abs(a - x) + abs(y - b)

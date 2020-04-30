@@ -8,21 +8,39 @@ class Game:
         self.height = height
         self.food_quantity = food_quantity
         self.nb_blobs = nb_blobs
-        self.turns = turns
+        self.nb_turns = nb_turns
+        self.nb_rounds = nb_rounds
         self.world = World(self.width, self.height)
 
-    def game_run(self):
-        self.world.create_world(self.food_quantity, self.nb_blobs)
+
+    def round(self) :
+        for turn in range(self.turns):
+            self.turn()
+
+    def turn(self) :
+        for blob in self.world.blobs:
+            self.world.move_blob(
+                blob_id=blob, direction=self.world.blobs[blob].direction_choice()
+            )
+        print('Turn : ' + str(turn))
         Display(self.world).display()
 
-        for turn in range(self.turns):
-            for blob in self.world.blobs:
-                self.world.move_blob(
-                    blob_id=blob, direction=self.world.blobs[blob].direction_choice())
-            print('Turn : ' + str(turn))
-            Display(self.world).display()
 
-        self.score_board()
+    def giving_phase(self) :
+        for blob in self.world.blobs:
+            if blob.inventory > 2 :
+                blob.give()
+
+    def deaths_phase(self) :
+        for blob in self.world.blobs:
+            if blob.inventory < 1:
+                blob.die()
+
+
+    def reproduction_phase(self):
+        for blob in self.world.blobs:
+            if blob.inventory > 1 :
+                blob.reproduce()
 
     def score_board(self):
         winners = []
@@ -36,3 +54,17 @@ class Game:
             elif blob.get_inventory() == current_best_score:
                 winners.append(blob.get_blob_id())
         print('The Blobs with the most food are : ' + str(winners))
+
+    def game_run(self):
+        self.world.create_world(self.food_quantity, self.nb_blobs)
+        Display(self.world).display()
+
+        for i in range(round_number) :
+            self.round()
+            self.giving_phase()
+            self.deaths_phase()
+            self.reproduction_phase()
+            world.delete_food()
+            world.delete_remaining_blobs_food()
+
+        self.score_board()
