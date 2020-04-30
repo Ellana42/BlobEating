@@ -1,5 +1,5 @@
 from random import choice
-
+num
 
 class Blob:
     def __init__(self, x, y, blob_id, world):
@@ -7,6 +7,7 @@ class Blob:
         self.x, self.y = x, y
         self.inventory = 0
         self.world = world.get_food_locations()  # Blob knows the coordinates of food
+        self.generosity_vector = array([])
 
     def get_position(self):
         return self.x, self.y
@@ -41,6 +42,10 @@ class Blob:
         pass
 
     def die(self) :
+        players = self.world.blobs
+        new_world = Blob.delete
+
+
         pass
 
     def reproduce(self):

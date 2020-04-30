@@ -66,5 +66,6 @@ class Game:
             self.reproduction_phase()
             world.delete_food()
             world.delete_remaining_blobs_food()
+            world.update_blobs() # update each blobs generosity vector
 
         self.score_board()

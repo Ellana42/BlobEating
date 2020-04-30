@@ -69,14 +69,25 @@ class World:
             x, y = self.random_empty_tile()
             self.food[x, y] = Food()
 
+    def self.delete_food() :
+        pass
+
+
     def add_blobs(self, nb_blobs):
         for blob_id in range(nb_blobs):
             x, y = self.random_border_tile()
             self.blobs[blob_id] = Blob(x, y, blob_id, self)
 
+    def delete_remaining_blobs_food(self):
+        pass
+
+    def update_blobs(self) :
+        pass
+
     def create_world(self, food_quantity=5, nb_blobs=4):
         self.add_food(food_quantity)
         self.add_blobs(nb_blobs)
+
 
     # Movement mechanic
 

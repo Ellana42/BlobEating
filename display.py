@@ -20,4 +20,4 @@ class Display:
                     print(self.empty_space, end='')
             print("|")
 
-        print('–' * (w + 1) * 2)
+        print('-' * (w + 1) * 2)
