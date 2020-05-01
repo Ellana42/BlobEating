@@ -1,13 +1,14 @@
-from random import choice
-num
+from numpy.random import choice
+
 
 class Blob:
-    def __init__(self, x, y, blob_id, world):
-        self.blob_id = blob_id
+    def __init__(self, x, y, world, blob_id = 0):
+        self.blob_id = blob_id                  # il y a des modules pour mettre des identifiants uniques si on en a besoin
         self.x, self.y = x, y
         self.inventory = 0
-        self.world = world.get_food_locations()  # Blob knows the coordinates of food
-        self.generosity_vector = array([])
+        self.world = world
+        self.perceived_world = world.get_food_locations()  # Blob knows the coordinates of food
+        self.generosity_vector = []
 
     def get_position(self):
         return self.x, self.y
@@ -26,22 +27,38 @@ class Blob:
                   "d": (0, 1)}[direction]
         return x + dx, y + dy
 
-    def move(self, x, y):
-        self.x, self.y = x, y
+    def move(self, new_x, new_y):
+        self.x, self.y = new_x, new_y  # added `new_` where relevant for clarity [Rémi]
 
     def eats(self, food):
         self.inventory += food.get_quantity()
 
     def direction_choice(self):
-        food_locations = self.world
+        food_locations = self.perceived_world
         a, b = Blob.find_nearest_location(self.x, self.y, food_locations)
         direction = Blob.get_near_to(self.x, self.y, a, b)
         return direction
 
-    def give(self) :
-        pass
+    def get_generosity_vector(self, giver_index):
+        return self.world.generosity_matrix[giver_index]
+
+
+    def choose_receivers(self, giver_index, nb_receivers):
+        self.generosity_vector = self.get_generosity_vector(giver_index)
+        receivers = choice(self.world.blobs, nb_receivers, p=self.generosity_vector)
+        return receivers
+
+    def give(self, giver_index):
+        nb_extra_food = self.inventory - 2
+        receivers = self.choose_receivers(giver_index = giver_index, nb_receivers = nb_extra_food)
+        self.inventory += -nb_extra_food
+        for receiver in receivers :
+            receiver.inventory += 1
+
+
 
     def die(self) :
+        # IN PROGRESS
         players = self.world.blobs
         new_world = Blob.delete
 
@@ -49,6 +66,7 @@ class Blob:
         pass
 
     def reproduce(self):
+        # TODO
         pass
 
 
