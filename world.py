@@ -15,8 +15,7 @@ class World:
         self.width = width
         self.height = height
         self.food = {}
-        self.blobs = []
-        self.generosity_matrix = []
+        self.blobs = {}
 
     # Intermediary mvt functions
 
@@ -77,20 +76,13 @@ class World:
     def add_blobs(self, nb_blobs):
         for blob_id in range(nb_blobs):
             x, y = self.random_border_tile()
-
-            for blob in self.blobs:
-                # ajouter le coefficient de générorité de chaque ancien blob
-                # vers le nouveau blob
-                pass
-
-            self.blobs.append(Blob(x, y, self))
-            # créer et ajouter le vecteur de générosité du nouveau blob
-            # self.generosity_matrix.append(un vecteur de générosité de taille self.blobs.len())
-
+            self.blobs[blob_id] = Blob(x, y, blob_id, self)
 
     def delete_remaining_blobs_food(self):
         pass
 
+    def update_blobs(self) :
+        pass
 
     def create_world(self, food_quantity=5, nb_blobs=4):
         self.add_food(food_quantity)
@@ -99,11 +91,13 @@ class World:
 
     # Movement mechanic
 
-    def move_blob(self, blob):
-        direction = blob.direction_choice()
-        x, y = blob.where_is_arrival(direction)
+    def move_blob(self, blob_id, direction):
+        if blob_id not in self.blobs:
+            raise Exception('Incorrect blob_icon id !')
+        current_blob = self.blobs[blob_id]  # I get the corresponding blob_icon
+        x, y = current_blob.where_is_arrival(direction)
         if self.i_can_move(x, y):
-            blob.move(x, y)
+            current_blob.move(x, y)
         if self.there_is_food(x, y):
-            blob.eats(self.food[x, y])
+            current_blob.eats(self.food[x, y])
             del self.food[x, y]

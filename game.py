@@ -12,21 +12,24 @@ class Game:
         self.nb_rounds = nb_rounds
         self.world = World(self.width, self.height)
 
+
     def round(self) :
-        for turn in range(self.nb_turns):
+        for turn in range(self.turns):
             self.turn()
 
     def turn(self) :
         for blob in self.world.blobs:
-            self.world.move_blob(blob)
+            self.world.move_blob(
+                blob_id=blob, direction=self.world.blobs[blob].direction_choice()
+            )
         print('Turn : ' + str(turn))
         Display(self.world).display()
 
 
     def giving_phase(self) :
-        for giver_index, blob in enumerate(self.world.blobs) :
+        for blob in self.world.blobs:
             if blob.inventory > 2 :
-                blob.give(giver_index)
+                blob.give()
 
     def deaths_phase(self) :
         for blob in self.world.blobs:
@@ -56,12 +59,13 @@ class Game:
         self.world.create_world(self.food_quantity, self.nb_blobs)
         Display(self.world).display()
 
-        for i in range(nb_rounds) :
+        for i in range(round_number) :
             self.round()
             self.giving_phase()
             self.deaths_phase()
             self.reproduction_phase()
             world.delete_food()
             world.delete_remaining_blobs_food()
+            world.update_blobs() # update each blobs generosity vector
 
         self.score_board()
