@@ -41,10 +41,20 @@ class Blob:
     def give(self) :
         pass
 
-    def die(self) :
-        players = self.world.blobs
-        new_world = Blob.delete
+    def delete_losers (self, self.inventory):
+        list_blobs = []
+        for blob in self.world.blobs :
+           list.append(blob)
+        losers = self.world.blobs
+        for blob in self.world.blob
+            if self.inventory<1 :
+               list.remove(blob)
+    #Objectif : lister tous les joueurs et supprimer à chaque tour ceux qui ont un inventaire vide
+        return list_blobs
 
+    def die(self) :
+        new_world = self.delete_losers (self.inventory)
+    # Idée : appliquer la fonction précédente à notre monde pour qu'il soit mis à jour après chaque tour
 
         pass
 
