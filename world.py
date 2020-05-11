@@ -78,6 +78,32 @@ class World:
             x, y = self.random_border_tile()
             self.blobs[blob_id] = Blob(x, y, blob_id, self)
 
+Class New_world(World):
+       def __init__(self,width=10, height=10):
+            self.width = width
+            self.height = height
+            self.food = {}
+            self.blobs
+            pass
+
+            self.blobs.append(Blob(x,y,self))
+            self.generosity_vector.append()
+            pass
+
+    #Piste : Créer une classe New_world qui hérite de la classe World pour faciliter la mise à jour du plateau ?
+    #Les fonctions ci-dessous sont des méthodes de la nouvelle classe.
+
+    def delete_losers (self, self.inventory):
+         list_blobs = []
+         for blob in self.world.blobs :
+             list_blobs.append(blob)
+         losers = self.world.blobs
+         for blob in self.world.blob
+             if self.inventory<1 :
+                list_blobs.remove(blob)
+     #Objectif : lister tous les joueurs et supprimer à chaque tour ceux qui ont un inventaire vide
+         return list_blobs
+
     def delete_remaining_blobs_food(self):
         pass
 
