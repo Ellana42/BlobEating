@@ -29,9 +29,9 @@ class Game:
                 blob.give(giver_index)
 
     def deaths_phase(self) :
-        for blob in self.world.blobs:
+        for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory < 1:
-                blob.die()
+                world.remove_blob(blob_index)
 
 
     def reproduction_phase(self):

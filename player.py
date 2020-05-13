@@ -56,15 +56,6 @@ class Blob:
             receiver.inventory += 1
 
 
-
-    def die(self) :
-        # IN PROGRESS
-        players = self.world.blobs
-        new_world = Blob.delete
-
-
-        pass
-
     def reproduce(self):
         # TODO
         pass
