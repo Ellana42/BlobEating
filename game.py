@@ -37,7 +37,7 @@ class Game:
     def reproduction_phase(self):
         for blob in self.world.blobs:
             if blob.inventory > 1 :
-                blob.reproduce()
+                self.duplicate_blob(blob)
 
     def score_board(self):
         winners = []

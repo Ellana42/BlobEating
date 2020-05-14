@@ -83,8 +83,8 @@ class World:
 
     def add_blobs(self, nb_new_blobs):
         for i in range(nb_new_blobs):
-            # x, y = self.random_empty_tile()
-            self.blobs.append(Blob(1, 1, self))
+            x, y = self.random_empty_tile()
+            self.blobs.append(Blob(x, y, self))
 
             # Update generosity_matrix
             nb_existing_blobs = len(self.blobs)
@@ -97,9 +97,14 @@ class World:
             self.generosity_matrix = np.append(self.generosity_matrix,
                                                     column, axis = 1)
             line = abs(np.random.randn(1, nb_existing_blobs))
+            line = line/np.sum(line)
             self.generosity_matrix = np.append(self.generosity_matrix,
                                                 line, axis = 0)
-        self.stochastify_matrix()
+
+    def duplicate_blob(self, blob):
+        ## TODO: write function
+        pass
+
 
     def remove_blob(self, blob_index) :
         # On supprime un blob

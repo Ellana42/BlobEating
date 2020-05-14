@@ -2,13 +2,15 @@ from numpy.random import choice
 # dummy commit
 
 class Blob:
-    def __init__(self, x, y, world, blob_id = 0):
+    def __init__(self, x, y, world, blob_id = 0, gratefulness, vexation):
         self.blob_id = blob_id                  # il y a des modules pour mettre des identifiants uniques si on en a besoin
         self.x, self.y = x, y
         self.inventory = 0
         self.world = world
         self.perceived_world = world.get_food_locations()  # Blob knows the coordinates of food
         self.generosity_vector = []
+        self.gratefulness = gratefulness
+        self.vexation = vexation
 
     def get_position(self):
         return self.x, self.y
@@ -48,17 +50,21 @@ class Blob:
         receivers = choice(self.world.blobs, nb_receivers, p=self.generosity_vector)
         return receivers
 
+    def become_grateful(self, giver_index, reciever_index):
+        # à tester
+        old_coeff = world.generosity_matrix[reciever_index, giver_index]
+        row_sum = old_coeff * self.gratefulness + 1
+        world.generosity_matrix[reciever_index, :] /= row_sum
+        world.generosity_matrix[reciever_index, giver_index] = old_coeff
+                                                            * self.gratefulness
+
     def give(self, giver_index):
         nb_extra_food = self.inventory - 2
         receivers = self.choose_receivers(giver_index = giver_index, nb_receivers = nb_extra_food)
         self.inventory += -nb_extra_food
-        for receiver in receivers :
+        for receiver_index, reciever in enumerate(receivers) :
             receiver.inventory += 1
-
-
-    def reproduce(self):
-        # TODO
-        pass
+            become_grateful(giver_index, reciever_index)
 
 
     @classmethod

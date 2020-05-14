@@ -9,11 +9,11 @@ import matplotlib.pyplot as plt
 choice = ['A','E'] #altruism or egoism
 
 def generosity_matrix(M):
-     M=np.zeros((nb_blobs+1,nb_blobs+1))
+     M=np.zeros((nb_blobs, nb_blobs))
      for k in range(nb_blobs):
        M[k,k+1]=random() #Génère un nombre aléatoire entre 0 et 1 ( une proba )
        M[k,0]=random()
-       M[K,K]=1
+       M[k,k]=1
     return M
 #Matrice de connectivité qui contiendra en coefficient(i,j) la probabilité que le blob i donne une unité de nourriture au blob j s'il peut le faire.
 
