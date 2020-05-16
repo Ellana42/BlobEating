@@ -12,9 +12,12 @@ class Food:
 
 
 class World:
-    def __init__(self, width=10, height=10):
+    def __init__(self, width=10, height=10,
+                mutation_intensity = 0.2, mutation_probability = 0.5):
         self.width = width
         self.height = height
+        self.mutation_intensity = mutation_intensity
+        self.mutation_probability = mutation_probability
         self.food = {}
         self.blobs = []
         self.generosity_matrix = np.array([[]])
@@ -101,9 +104,34 @@ class World:
             self.generosity_matrix = np.append(self.generosity_matrix,
                                                 line, axis = 0)
 
-    def duplicate_blob(self, blob):
-        ## TODO: write function
-        pass
+    def mutation(self, p):
+        return np.random.choice([True, False], p=[p, 1 - p])
+
+    def duplicate_blob(self, parent, parent_index):
+        # Testé
+        # New Blob
+        x, y = self.random_empty_tile()
+        new_gratefulness = parent.gratefulness
+        new_vexation = parent.vexation
+        if self.mutation(self.mutation_probability):
+            new_gratefulness *= (1
+                            + np.random.choice([-1,1])*self.mutation_intensity)
+        if self.mutation(self.mutation_probability):
+            new_vexation *= (1
+                            + np.random.choice([-1,1])*self.mutation_intensity)
+        new_blob = Blob(x, y, self, gratefulness = new_gratefulness,
+                        vexation = new_vexation)
+        self.blobs.append(new_blob)
+
+        # Update generosity_matrix
+        nb_existing_blobs = len(self.blobs)
+        column = np.zeros((nb_existing_blobs - 1, 1))
+        self.generosity_matrix = np.append(self.generosity_matrix,
+                                                column, axis = 1)
+        line = abs(np.random.randn(1, nb_existing_blobs))
+        line = line/np.sum(line)
+        self.generosity_matrix = np.append(self.generosity_matrix,
+                                            line, axis = 0)
 
 
     def remove_blob(self, blob_index) :

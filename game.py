@@ -3,7 +3,8 @@ from display import Display
 
 
 class Game:
-    def __init__(self, width=10, height=10, food_quantity=20, nb_blobs=4, turns=10):
+    def __init__(self, width=10, height=10,
+                food_quantity=20, nb_blobs=4, turns=10):
         self.width = width
         self.height = height
         self.food_quantity = food_quantity
@@ -35,9 +36,9 @@ class Game:
 
 
     def reproduction_phase(self):
-        for blob in self.world.blobs:
+        for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory > 1 :
-                self.duplicate_blob(blob)
+                self.world.duplicate_blob(blob, blob_index)
 
     def score_board(self):
         winners = []
