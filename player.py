@@ -2,13 +2,11 @@ from numpy.random import choice
 # dummy commit
 
 class Blob:
-    def __init__(self, x, y, world, blob_id = 0,
+    def __init__(self, x, y, world,
                 gratefulness = 0.5, vexation = 0.5):
-        self.blob_id = blob_id                  # il y a des modules pour mettre des identifiants uniques si on en a besoin
         self.x, self.y = x, y
         self.inventory = 0
         self.world = world
-        self.perceived_world = world.get_food_locations()  # Blob knows the coordinates of food
         self.generosity_vector = []
         self.gratefulness = gratefulness
         self.vexation = vexation
@@ -68,22 +66,22 @@ class Blob:
             become_grateful(giver_index, reciever_index)
 
 
-    @classmethod
-    def step_distance(cls, x, y, a, b):
+    @staticmethod
+    def step_distance(x, y, a, b):
         return abs(a - x) + abs(y - b)
 
-    @classmethod  # Warning : if there is an equality, one location among the shortest will be returned
-    def find_nearest_location(cls, x, y, list_of_locations):
+    @staticmethod  # Warning : if there is an equality, one location among the shortest will be returned
+    def find_nearest_location(x, y, list_of_locations):
         minimum_distance = 1000000
         nearest_location = ()
         for (a, b) in list_of_locations:
-            if Blob.step_distance(x, y, a, b) < minimum_distance:
+            if self.step_distance(x, y, a, b) < minimum_distance:
                 nearest_location = a, b
                 minimum_distance = Blob.step_distance(x, y, a, b)
         return nearest_location
 
-    @classmethod
-    def get_near_to(cls, x, y, a, b):
+    @staticmethod
+    def get_near_to(x, y, a, b):
         right_directions = []
         x_difference = a - x
         y_difference = b - y

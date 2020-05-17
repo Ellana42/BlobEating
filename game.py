@@ -4,7 +4,7 @@ from display import Display
 
 class Game:
     def __init__(self, width=10, height=10,
-                food_quantity=20, nb_blobs=4, turns=10):
+                food_quantity=20, nb_blobs=4, nb_turns=10):
         self.width = width
         self.height = height
         self.food_quantity = food_quantity
@@ -14,13 +14,14 @@ class Game:
         self.world = World(self.width, self.height)
 
     def round(self) :
+        print("////// Round number {} /////".format(i))
         for turn in range(self.nb_turns):
             self.turn()
 
     def turn(self) :
+        print('Turn : ' + str(turn))
         for blob in self.world.blobs:
             self.world.move_blob(blob)
-        print('Turn : ' + str(turn))
         Display(self.world).display()
 
 
@@ -54,10 +55,11 @@ class Game:
         print('The Blobs with the most food are : ' + str(winners))
 
     def game_run(self):
-        self.world.create_world(self.food_quantity, self.nb_blobs)
+        self.world.add_blobs(self.nb_blobs)
         Display(self.world).display()
 
         for i in range(nb_rounds) :
+            self.world.add_food(food_quantity)
             self.round()
             self.giving_phase()
             self.deaths_phase()

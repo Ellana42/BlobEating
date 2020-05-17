@@ -33,6 +33,9 @@ class World:
     def is_on_the_board(self, x, y):
         return x in range(self.width) and y in range(self.height)
 
+    def get_blob_positions(self):
+        return [(blob.x, blob.y) for blob in self.blobs]
+
     def there_is_no_player(self, x, y):
         return (x, y) not in self.get_blob_positions()
 
@@ -44,9 +47,6 @@ class World:
 
     def there_is_food(self, x, y):
         return (x, y) in self.food
-
-    def get_blob_positions(self):
-        return [(blob.x, blob.y) for blob in self.blobs.values()]
 
     def get_food_locations(self):
         return self.food.keys()
@@ -134,7 +134,7 @@ class World:
                                             line, axis = 0)
 
 
-    def remove_blob(self, blob_index) :
+    def remove_blob(self, blob_index):
         # On supprime un blob
         self.blobs.pop(blob_index)
 
@@ -150,9 +150,11 @@ class World:
         pass
 
 
-    def create_world(self, food_quantity=5, nb_blobs=4):
-        self.add_food(food_quantity)
-        self.add_blobs(nb_blobs)
+    # Function replaced by add_blobs(). Food is added at the beginning of each
+    # round.
+    # def create_world(self, food_quantity=5, nb_blobs=4):
+    #     self.add_food(food_quantity)
+    #     self.add_blobs(nb_blobs)
 
 
     # Movement mechanic
