@@ -1,10 +1,12 @@
 from numpy.random import choice
+
+
 # dummy commit
 
 class Blob:
-    def __init__(self, x, y, world, blob_id = 0,
-                gratefulness = 0.5, vexation = 0.5):
-        self.blob_id = blob_id                  # il y a des modules pour mettre des identifiants uniques si on en a besoin
+    def __init__(self, x, y, world, blob_id=0,
+                 gratefulness=0.5, vexation=0.5):
+        self.blob_id = blob_id  # il y a des modules pour mettre des identifiants uniques si on en a besoin
         self.x, self.y = x, y
         self.inventory = 0
         self.world = world
@@ -45,28 +47,27 @@ class Blob:
     def get_generosity_vector(self, giver_index):
         return self.world.generosity_matrix[giver_index]
 
-
     def choose_receivers(self, giver_index, nb_receivers):
         self.generosity_vector = self.get_generosity_vector(giver_index)
         receivers = choice(self.world.blobs, nb_receivers, p=self.generosity_vector)
         return receivers
 
-    def become_grateful(self, giver_index, reciever_index):
+    def become_grateful(self, giver_index, receiver_index):
         # à tester
-        old_coeff = world.generosity_matrix[reciever_index, giver_index]
+        old_coeff = world.generosity_matrix[receiver_index, giver_index]
         row_sum = old_coeff * self.gratefulness + 1
-        world.generosity_matrix[reciever_index, :] /= row_sum
-        world.generosity_matrix[reciever_index, giver_index] = (old_coeff
-                                                            * self.gratefulness)
+        world.generosity_matrix[receiver_index, :] /= row_sum
+        world.generosity_matrix[receiver_index, giver_index] = (old_coeff
+                                                                * self.gratefulness)
 
     def give(self, giver_index):
+        # relue
         nb_extra_food = self.inventory - 2
-        receivers = self.choose_receivers(giver_index = giver_index, nb_receivers = nb_extra_food)
-        self.inventory += -nb_extra_food
-        for receiver_index, reciever in enumerate(receivers) :
+        receivers = self.choose_receivers(giver_index=giver_index, nb_receivers=nb_extra_food)
+        self.inventory -= nb_extra_food
+        for receiver_index, receiver in enumerate(receivers):
             receiver.inventory += 1
-            become_grateful(giver_index, reciever_index)
-
+            become_grateful(giver_index, receiver_index)
 
     @classmethod
     def step_distance(cls, x, y, a, b):

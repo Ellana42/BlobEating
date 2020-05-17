@@ -4,7 +4,7 @@ from display import Display
 
 class Game:
     def __init__(self, width=10, height=10,
-                food_quantity=20, nb_blobs=4, turns=10):
+                 food_quantity=20, nb_blobs=4, nb_turns=10):
         self.width = width
         self.height = height
         self.food_quantity = food_quantity
@@ -13,31 +13,29 @@ class Game:
         self.nb_rounds = nb_rounds
         self.world = World(self.width, self.height)
 
-    def round(self) :
-        for turn in range(self.nb_turns):
+    def round(self):
+        for _ in range(self.nb_turns):
             self.turn()
 
-    def turn(self) :
+    def turn(self):
         for blob in self.world.blobs:
             self.world.move_blob(blob)
         print('Turn : ' + str(turn))
         Display(self.world).display()
 
-
-    def giving_phase(self) :
-        for giver_index, blob in enumerate(self.world.blobs) :
-            if blob.inventory > 2 :
+    def giving_phase(self):
+        for giver_index, blob in enumerate(self.world.blobs):
+            if blob.inventory > 2:
                 blob.give(giver_index)
 
-    def deaths_phase(self) :
+    def deaths_phase(self):
         for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory < 1:
                 world.remove_blob(blob_index)
 
-
     def reproduction_phase(self):
         for blob_index, blob in enumerate(self.world.blobs):
-            if blob.inventory > 1 :
+            if blob.inventory > 1:
                 self.world.duplicate_blob(blob, blob_index)
 
     def score_board(self):
@@ -57,7 +55,7 @@ class Game:
         self.world.create_world(self.food_quantity, self.nb_blobs)
         Display(self.world).display()
 
-        for i in range(nb_rounds) :
+        for _ in range(nb_rounds):
             self.round()
             self.giving_phase()
             self.deaths_phase()
