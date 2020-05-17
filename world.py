@@ -13,7 +13,7 @@ class Food:
 
 class World:
     def __init__(self, width=10, height=10,
-                mutation_intensity = 0.2, mutation_probability = 0.5):
+                 mutation_intensity=0.2, mutation_probability=0.5):
         self.width = width
         self.height = height
         self.mutation_intensity = mutation_intensity
@@ -77,15 +77,15 @@ class World:
             x, y = self.random_empty_tile()
             self.food[x, y] = Food()
 
-    def delete_food() :
-        pass
+    def delete_food(self):
+        self.food = {}
 
     def stochastify_matrix(self):
-        sum_vector = np.sum(self.generosity_matrix, axis = 1)
-        self.generosity_matrix = self.generosity_matrix / sum_vector[:,None]
+        sum_vector = np.sum(self.generosity_matrix, axis=1)
+        self.generosity_matrix = self.generosity_matrix / sum_vector[:, None]
 
     def add_blobs(self, nb_new_blobs):
-        for i in range(nb_new_blobs):
+        for _ in range(nb_new_blobs):
             x, y = self.random_empty_tile()
             self.blobs.append(Blob(x, y, self))
 
@@ -98,64 +98,64 @@ class World:
                 continue
             column = np.zeros((nb_existing_blobs - 1, 1))
             self.generosity_matrix = np.append(self.generosity_matrix,
-                                                    column, axis = 1)
+                                               column, axis=1)
             line = abs(np.random.randn(1, nb_existing_blobs))
-            line = line/np.sum(line)
+            line = line / np.sum(line)
             self.generosity_matrix = np.append(self.generosity_matrix,
-                                                line, axis = 0)
+                                               line, axis=0)
 
-    def mutation(self, p):
+    @Staticmethod
+    def mutation(p):
         return np.random.choice([True, False], p=[p, 1 - p])
 
-    def duplicate_blob(self, parent, parent_index):
+    def duplicate_blob(self, parent):
         # Testé
+
         # New Blob
         x, y = self.random_empty_tile()
         new_gratefulness = parent.gratefulness
         new_vexation = parent.vexation
-        if self.mutation(self.mutation_probability):
+        if World.mutation(self.mutation_probability):
             new_gratefulness *= (1
-                            + np.random.choice([-1,1])*self.mutation_intensity)
-        if self.mutation(self.mutation_probability):
+                                 + np.random.choice([-1, 1]) * self.mutation_intensity)
+        if World.mutation(self.mutation_probability):
             new_vexation *= (1
-                            + np.random.choice([-1,1])*self.mutation_intensity)
-        new_blob = Blob(x, y, self, gratefulness = new_gratefulness,
-                        vexation = new_vexation)
+                             + np.random.choice([-1, 1]) * self.mutation_intensity)
+        new_blob = Blob(x, y, self, gratefulness=new_gratefulness,
+                        vexation=new_vexation)
         self.blobs.append(new_blob)
 
         # Update generosity_matrix
         nb_existing_blobs = len(self.blobs)
         column = np.zeros((nb_existing_blobs - 1, 1))
         self.generosity_matrix = np.append(self.generosity_matrix,
-                                                column, axis = 1)
+                                           column, axis=1)
         line = abs(np.random.randn(1, nb_existing_blobs))
-        line = line/np.sum(line)
+        line = line / np.sum(line)
         self.generosity_matrix = np.append(self.generosity_matrix,
-                                            line, axis = 0)
-
+                                           line, axis=0)
 
     def remove_blob(self, blob_index):
         # On supprime un blob
         self.blobs.pop(blob_index)
 
-        #On met à jour la matrice
+        # On met à jour la matrice de connectivité
         self.generosity_matrix = np.delete(self.generosity_matrix,
-                                            blob_index,axis = 0)
+                                           blob_index, axis=0)
         self.generosity_matrix = np.delete(self.generosity_matrix,
-                                            blob_index,axis = 1)
+                                           blob_index, axis=1)
         self.stochastify_matrix()
 
-
     def delete_remaining_blobs_food(self):
-        pass
-
+        # On supprime la nourriture qu'il reste aux survivants à la fin du tour
+        for blob in self.blobs:
+            blob.inventory = 0
 
     # Function replaced by add_blobs(). Food is added at the beginning of each
     # round.
     # def create_world(self, food_quantity=5, nb_blobs=4):
     #     self.add_food(food_quantity)
     #     self.add_blobs(nb_blobs)
-
 
     # Movement mechanic
 

@@ -24,21 +24,19 @@ class Game:
             self.world.move_blob(blob)
         Display(self.world).display()
 
-
-    def giving_phase(self) :
-        for giver_index, blob in enumerate(self.world.blobs) :
-            if blob.inventory > 2 :
+    def giving_phase(self):
+        for giver_index, blob in enumerate(self.world.blobs):
+            if blob.inventory > 2:
                 blob.give(giver_index)
 
-    def deaths_phase(self) :
+    def deaths_phase(self):
         for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory < 1:
                 world.remove_blob(blob_index)
 
-
     def reproduction_phase(self):
         for blob_index, blob in enumerate(self.world.blobs):
-            if blob.inventory > 1 :
+            if blob.inventory > 1:
                 self.world.duplicate_blob(blob, blob_index)
 
     def score_board(self):
