@@ -103,8 +103,10 @@ class World:
             line = line / np.sum(line)
             self.generosity_matrix = np.append(self.generosity_matrix,
                                                line, axis=0)
+        print("generosity_matrix : \n {} \n -----------".format(
+                                                        self.generosity_matrix))
 
-    @Staticmethod
+    @staticmethod
     def mutation(p):
         return np.random.choice([True, False], p=[p, 1 - p])
 

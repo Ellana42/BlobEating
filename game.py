@@ -3,8 +3,8 @@ from display import Display
 
 
 class Game:
-    def __init__(self, width=10, height=10,
-                food_quantity=20, nb_blobs=4, nb_turns=10):
+    def __init__(self, nb_rounds = 10, nb_turns=10, width=10, height=10,
+                food_quantity=20, nb_blobs=4):
         self.width = width
         self.height = height
         self.food_quantity = food_quantity
@@ -14,12 +14,11 @@ class Game:
         self.world = World(self.width, self.height)
 
     def round(self) :
-        print("////// Round number {} /////".format(i))
         for turn in range(self.nb_turns):
+            print('Turn : ' + str(turn))
             self.turn()
 
     def turn(self) :
-        print('Turn : ' + str(turn))
         for blob in self.world.blobs:
             self.world.move_blob(blob)
         Display(self.world).display()
@@ -56,8 +55,9 @@ class Game:
         self.world.add_blobs(self.nb_blobs)
         Display(self.world).display()
 
-        for i in range(nb_rounds) :
-            self.world.add_food(food_quantity)
+        for i in range(self.nb_rounds) :
+            self.world.add_food(self.food_quantity)
+            print("////// Round number {} /////".format(i))
             self.round()
             self.giving_phase()
             self.deaths_phase()

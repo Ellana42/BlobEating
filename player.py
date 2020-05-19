@@ -37,7 +37,7 @@ class Blob:
         self.inventory += food.get_quantity()
 
     def direction_choice(self):
-        food_locations = self.perceived_world
+        food_locations = self.world.get_food_locations()
         a, b = Blob.find_nearest_location(self.x, self.y, food_locations)
         direction = Blob.get_near_to(self.x, self.y, a, b)
         return direction
@@ -47,16 +47,34 @@ class Blob:
 
     def choose_receivers(self, giver_index, nb_receivers):
         self.generosity_vector = self.get_generosity_vector(giver_index)
-        receivers = choice(self.world.blobs, nb_receivers, p=self.generosity_vector)
+        print(self.generosity_vector)
+        print(self.generosity_vector.sum())
+        receivers = choice(self.world.blobs, nb_receivers,
+                            p=self.generosity_vector)
         return receivers
 
     def become_grateful(self, giver_index, receiver_index):
         # à tester
-        old_coeff = world.generosity_matrix[receiver_index, giver_index]
+        old_coeff = self.world.generosity_matrix[receiver_index, giver_index]
         row_sum = old_coeff * self.gratefulness + 1
-        world.generosity_matrix[receiver_index, :] /= row_sum
-        world.generosity_matrix[receiver_index, giver_index] = (old_coeff
-                                                                * self.gratefulness)
+        self.world.generosity_matrix[receiver_index, :] /= row_sum
+        self.world.generosity_matrix[receiver_index, giver_index] = (old_coeff
+                                                        * (1+self.gratefulness))
+# %% Partie testée à implémenter dans become_grateful()
+# import numpy as np
+# vector = np.array([0.2, 0.3, 0.1, 0.4])
+# vieux_coef = vector[2]
+# nouveau_coef = vieux_coef*(1+0.3)
+# if nouveau_coef >= 1:
+#     vector = 0
+#     vector[2] = 1
+# else:
+#     vector *= (1 - nouveau_coef)/(1-vieux_coef)
+#     vector[2] = nouveau_coef
+# vector
+# vector.sum()
+
+
 
     def give(self, giver_index):
         # relue
@@ -65,7 +83,7 @@ class Blob:
         self.inventory -= nb_extra_food
         for receiver_index, receiver in enumerate(receivers):
             receiver.inventory += 1
-            become_grateful(giver_index, receiver_index)
+            self.become_grateful(giver_index, receiver_index)
 
     @staticmethod
     def step_distance(x, y, a, b):
@@ -76,7 +94,7 @@ class Blob:
         minimum_distance = 1000000
         nearest_location = ()
         for (a, b) in list_of_locations:
-            if self.step_distance(x, y, a, b) < minimum_distance:
+            if Blob.step_distance(x, y, a, b) < minimum_distance:
                 nearest_location = a, b
                 minimum_distance = Blob.step_distance(x, y, a, b)
         return nearest_location
