@@ -1,3 +1,6 @@
 from game import Game
+from display import plot
 
-Game().game_run()
+game = Game().game_run()
+
+plot(game.game_stats)

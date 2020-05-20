@@ -1,11 +1,11 @@
-from numpy.random import choice
-
+from random import choice
 
 # dummy commit
 
 class Blob:
+
     def __init__(self, x, y, world,
-                gratefulness = 0.5, vexation = 0.5):
+                 gratefulness=0.5, vexation=0.5):
         self.x, self.y = x, y
         self.inventory = 0
         self.world = world
@@ -30,13 +30,14 @@ class Blob:
                   "d": (0, 1)}[direction]
         return x + dx, y + dy
 
-    def move(self, new_x, new_y):
-        self.x, self.y = new_x, new_y  # added `new_` where relevant for clarity [Rémi]
+    def move(self, x, y):
+        self.x, self.y = x, y
 
     def eats(self, food):
         self.inventory += food.get_quantity()
 
     def direction_choice(self):
+
         food_locations = self.world.get_food_locations()
         a, b = Blob.find_nearest_location(self.x, self.y, food_locations)
         direction = Blob.get_near_to(self.x, self.y, a, b)
@@ -66,8 +67,6 @@ class Blob:
             update_factor = (1 - new_coeff) / (1 - old_coeff)
             self.world.generosity_matrix[receiver_index, :] *= update_factor
             self.world.generosity_matrix[receiver_index, giver_index]=new_coeff
-
-
 
 
     def give(self, giver_index):

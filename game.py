@@ -3,8 +3,8 @@ from display import Display
 
 
 class Game:
-    def __init__(self, nb_rounds = 10, nb_turns=10, width=10, height=10,
-                food_quantity=20, nb_blobs=4):
+    def __init__(self, nb_rounds=10, nb_turns=10, width=10, height=10,
+                 food_quantity=20, nb_blobs=4):
         self.width = width
         self.height = height
         self.food_quantity = food_quantity
@@ -12,13 +12,14 @@ class Game:
         self.nb_turns = nb_turns
         self.nb_rounds = nb_rounds
         self.world = World(self.width, self.height)
+        self.game_stats = []
 
-    def round(self) :
+    def round(self):
         for turn in range(self.nb_turns):
             print('Turn : ' + str(turn))
             self.turn()
 
-    def turn(self) :
+    def turn(self):
         for blob in self.world.blobs:
             if len(self.world.food) > 0:
                 self.world.move_blob(blob)
@@ -49,12 +50,19 @@ class Game:
         self.world.add_blobs(self.nb_blobs)
         Display(self.world).display()
 
-        for i in range(self.nb_rounds) :
+        for i in range(self.nb_rounds):
+            stats = {}
             self.world.add_food(self.food_quantity)
             print("////// Round number {} /////".format(i))
             self.round()
             self.giving_phase()
             self.deaths_phase()
             self.reproduction_phase()
+            stats['food_left'] = len(self.world.food)
             self.world.delete_food()
             self.world.delete_remaining_blobs_food()
+            self.world.update_blobs()  # update each blobs generosity vector
+            stats = {'nb_blobs': self.nb_blobs,
+                     'gratefulness': [blob.gratefulness for blob in self.world.blobs],
+                     'altruism': [1 - self.world.generosity_matrix[i, i] for i in range(self.nb_blobs)]}
+            self.game_stats.append(stats)

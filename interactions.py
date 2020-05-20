@@ -78,3 +78,4 @@ def tit_for_tat(list_decisions_i, list_decisions_j):
   else : #premier tour, le choix est aléatoire et dépend des probabilités dans la matrice ci-dessus
       return choice(choice)
       pass
+>>>>>>> 71c8d06aab72d025f6468e27aea97f5b68ab173a

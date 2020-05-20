@@ -104,7 +104,7 @@ class World:
             self.generosity_matrix = np.append(self.generosity_matrix,
                                                line, axis=0)
         print("generosity_matrix : \n {} \n -----------".format(
-                                                        self.generosity_matrix))
+            self.generosity_matrix))
 
     @staticmethod
     def mutation(p):
@@ -161,11 +161,13 @@ class World:
 
     # Movement mechanic
 
-    def move_blob(self, blob):
-        direction = blob.direction_choice()
-        x, y = blob.where_is_arrival(direction)
+    def move_blob(self, blob_id, direction):
+        if blob_id not in self.blobs:
+            raise Exception('Incorrect blob_icon id !')
+        current_blob = self.blobs[blob_id]  # I get the corresponding blob_icon
+        x, y = current_blob.where_is_arrival(direction)
         if self.i_can_move(x, y):
-            blob.move(x, y)
+            current_blob.move(x, y)
         if self.there_is_food(x, y):
-            blob.eats(self.food[x, y])
+            current_blob.eats(self.food[x, y])
             del self.food[x, y]
