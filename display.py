@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 
+
 def avg(list):
     return sum(list) / len(list)
+
 
 class Display:
     def __init__(self, world):
@@ -29,6 +31,7 @@ class Display:
 
 
 def plot(stats, chosen_stats=['gratefulness', 'altruism_index', 'altruism_proportion', 'nb_blobs', 'food_left']):
+    print(stats)
     formatted_stats = {}
     formatted_stats['gratefulness'], formatted_stats['altruism_index'], formatted_stats['altruism_proportion'] = format(
         stats)
@@ -39,10 +42,10 @@ def plot(stats, chosen_stats=['gratefulness', 'altruism_index', 'altruism_propor
     fig, axes = plt.subplots(len(chosen_stats), 1)
     fig.subplots_adjust(hspace=1)
     i = 0
-    for stat_name, stat in formatted_stats.enumerate():
+    for stat_name, stat in formatted_stats.items():
         axe = axes[i]
-        if len(stat) > 1:
-            for name_diff_stat, diff_stat in stat.enumerate():
+        if type(stat) == dict:
+            for name_diff_stat, diff_stat in stat.items():
                 axe.plot(rounds, diff_stat, label=name_diff_stat)
         else:
             axe.plot(rounds, stat)
