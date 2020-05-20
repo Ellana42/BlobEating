@@ -31,7 +31,6 @@ class Display:
 
 
 def plot(stats, chosen_stats=['gratefulness', 'altruism_index', 'altruism_proportion', 'nb_blobs', 'food_left']):
-    print(stats)
     formatted_stats = {}
     formatted_stats['gratefulness'], formatted_stats['altruism_index'], formatted_stats['altruism_proportion'] = format(
         stats)
@@ -40,7 +39,7 @@ def plot(stats, chosen_stats=['gratefulness', 'altruism_index', 'altruism_propor
     rounds = range(len(stats))
 
     fig, axes = plt.subplots(len(chosen_stats), 1)
-    fig.subplots_adjust(hspace=2)
+    fig.subplots_adjust(hspace=2g)
     i = 0
     for stat_name, stat in formatted_stats.items():
         axe = axes[i]
