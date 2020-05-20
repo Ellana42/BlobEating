@@ -56,6 +56,9 @@ class Blob:
         return receivers_indexes
 
     def become_grateful(self, giver_index, receiver_index):
+        if giver_index == receiver_index:
+            return
+        # Blobs don't become grateful toward themselves.
         old_coeff = self.world.generosity_matrix[receiver_index, giver_index]
         if old_coeff == 0:
             new_coeff = 0.05 # (low arbitrary value)

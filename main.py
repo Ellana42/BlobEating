@@ -1,6 +1,6 @@
 from game import Game
-#from display import plot
+from display import plot
 
-game = Game().game_run()
-
-# plot(game.game_stats)
+game = Game()
+game.run()
+plot(game.game_stats)

@@ -34,10 +34,16 @@ class Game:
 
     def deaths_phase(self):
         print("===== DEATHS PHASE =====")
+        death_list = []
         for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory < 1:
-                self.world.remove_blob(blob_index)
-                print("Blob #{} died. RIP.".format(blob_index))
+                death_list.append(blob_index)
+        self.world.remove_blobs(death_list)
+        if len(death_list) == 0:
+            print("All blobs made it to the next round! Yay!")
+        else:
+            for i in death_list:
+                print("Blob #{} died. RIP.".format(i))
 
     def reproduction_phase(self):
         print("===== REPRODUCTION PHASE =====")
@@ -46,22 +52,22 @@ class Game:
                 self.world.duplicate_blob(blob)
                 print("Blob #{} reproduced!".format(blob_index))
 
-    def game_run(self):
+    def run(self):
         self.world.add_blobs(self.nb_blobs)
         Display(self.world).display()
 
         for i in range(self.nb_rounds):
-            #stats = {}
+            stats = {}
             self.world.add_food(self.food_quantity)
             print("////// Round number {} /////".format(i))
             self.round()
             self.giving_phase()
             self.deaths_phase()
             self.reproduction_phase()
-            #stats['food_left'] = len(self.world.food)
+            stats['food_left'] = len(self.world.food)
             self.world.delete_food()
             self.world.delete_remaining_blobs_food()
-            # stats = {'nb_blobs': self.nb_blobs,
-            #          'gratefulness': [blob.gratefulness for blob in self.world.blobs],
-            #          'altruism': [1 - self.world.generosity_matrix[i, i] for i in range(self.nb_blobs)]}
-            # self.game_stats.append(stats)
+            stats = {'nb_blobs': self.nb_blobs,
+                     'gratefulness': [blob.gratefulness for blob in self.world.blobs],
+                     'altruism': [1 - self.world.generosity_matrix[i, i] for i in range(self.nb_blobs)]}
+            self.game_stats.append(stats)
