@@ -19,7 +19,7 @@ class World:
         self.mutation_intensity = mutation_intensity
         self.mutation_probability = mutation_probability
         self.food = {}
-        self.blobs = []
+        self.blobs = np.array([])
         self.generosity_matrix = np.array([[]])
 
     # Intermediary mvt functions
@@ -87,7 +87,7 @@ class World:
     def add_blobs(self, nb_new_blobs):
         for _ in range(nb_new_blobs):
             x, y = self.random_empty_tile()
-            self.blobs.append(Blob(x, y, self))
+            self.blobs = np.append(self.blobs, Blob(x, y, self)
 
             # Update generosity_matrix
             nb_existing_blobs = len(self.blobs)
@@ -125,7 +125,7 @@ class World:
                              + np.random.choice([-1, 1]) * self.mutation_intensity)
         new_blob = Blob(x, y, self, gratefulness=new_gratefulness,
                         vexation=new_vexation)
-        self.blobs.append(new_blob)
+        self.blobs = np.append(self.blobs, new_blob)
 
         # Update generosity_matrix
         nb_existing_blobs = len(self.blobs)
@@ -139,7 +139,7 @@ class World:
 
     def remove_blob(self, blob_index):
         # On supprime un blob
-        self.blobs.pop(blob_index)
+        self.blobs = np.delete(self.blob, blob_index)
 
         # On met à jour la matrice de connectivité
         self.generosity_matrix = np.delete(self.generosity_matrix,

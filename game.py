@@ -20,36 +20,30 @@ class Game:
 
     def turn(self) :
         for blob in self.world.blobs:
-            self.world.move_blob(blob)
+            if len(self.world.food) > 0:
+                self.world.move_blob(blob)
         Display(self.world).display()
 
     def giving_phase(self):
+        print("===== GIVING PHASE =====")
         for giver_index, blob in enumerate(self.world.blobs):
             if blob.inventory > 2:
                 blob.give(giver_index)
+        print("Generosity matrix : \n {}".format(self.world.generosity_matrix))
 
     def deaths_phase(self):
+        print("===== DEATHS PHASE =====")
         for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory < 1:
-                world.remove_blob(blob_index)
+                self.world.remove_blob(blob_index)
+                print("Blob #{} died. RIP.".format(blob_index))
 
     def reproduction_phase(self):
+        print("===== REPRODUCTION PHASE =====")
         for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory > 1:
-                self.world.duplicate_blob(blob, blob_index)
-
-    def score_board(self):
-        winners = []
-        current_best_score = 0
-        for blob in self.world.blobs.values():
-            print('Blob number {} got {} foods'.format(
-                blob.get_blob_id(), blob.get_inventory()))
-            if blob.get_inventory() > current_best_score:
-                winners = [blob.get_blob_id()]
-                current_best_score = blob.get_inventory()
-            elif blob.get_inventory() == current_best_score:
-                winners.append(blob.get_blob_id())
-        print('The Blobs with the most food are : ' + str(winners))
+                self.world.duplicate_blob(blob)
+                print("Blob #{} reproduced!".format(blob_index))
 
     def game_run(self):
         self.world.add_blobs(self.nb_blobs)
@@ -62,7 +56,5 @@ class Game:
             self.giving_phase()
             self.deaths_phase()
             self.reproduction_phase()
-            world.delete_food()
-            world.delete_remaining_blobs_food()
-
-        self.score_board()
+            self.world.delete_food()
+            self.world.delete_remaining_blobs_food()

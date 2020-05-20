@@ -47,42 +47,38 @@ class Blob:
 
     def choose_receivers(self, giver_index, nb_receivers):
         self.generosity_vector = self.get_generosity_vector(giver_index)
-        print(self.generosity_vector)
-        print(self.generosity_vector.sum())
-        receivers = choice(self.world.blobs, nb_receivers,
+        receivers_indexes = np.random.choice(
+                            len(self.world.blobs),
+                            nb_receivers,
                             p=self.generosity_vector)
-        return receivers
+        return receivers_indexes
 
     def become_grateful(self, giver_index, receiver_index):
-        # à tester
         old_coeff = self.world.generosity_matrix[receiver_index, giver_index]
-        row_sum = old_coeff * self.gratefulness + 1
-        self.world.generosity_matrix[receiver_index, :] /= row_sum
-        self.world.generosity_matrix[receiver_index, giver_index] = (old_coeff
-                                                        * (1+self.gratefulness))
-# %% Partie testée à implémenter dans become_grateful()
-# import numpy as np
-# vector = np.array([0.2, 0.3, 0.1, 0.4])
-# vieux_coef = vector[2]
-# nouveau_coef = vieux_coef*(1+0.3)
-# if nouveau_coef >= 1:
-#     vector = 0
-#     vector[2] = 1
-# else:
-#     vector *= (1 - nouveau_coef)/(1-vieux_coef)
-#     vector[2] = nouveau_coef
-# vector
-# vector.sum()
+        if old_coeff == 0:
+            new_coeff = 0.05 # (low arbitrary value)
+        else:
+            new_coeff = old_coeff * (1 + self.gratefulness)
+        if new_coeff >= 1:
+            self.world.generosity_matrix[receiver_index, :] *= 0
+            self.world.generosity_matrix[receiver_index, giver_index] = 1
+        else:
+            update_factor = (1 - new_coeff) / (1 - old_coeff)
+            self.world.generosity_matrix[receiver_index, :] *= update_factor
+            self.world.generosity_matrix[receiver_index, giver_index]=new_coeff
+
 
 
 
     def give(self, giver_index):
-        # relue
         nb_extra_food = self.inventory - 2
-        receivers = self.choose_receivers(giver_index=giver_index, nb_receivers=nb_extra_food)
+        receivers_indexes = self.choose_receivers(giver_index=giver_index,
+                                                    nb_receivers=nb_extra_food)
         self.inventory -= nb_extra_food
-        for receiver_index, receiver in enumerate(receivers):
-            receiver.inventory += 1
+        for receiver_index in receivers_indexes:
+            print("Blob #{} gives 1 food to blob #{}".format(giver_index,
+                receiver_index))
+            self.world.blobs[receiver_index].inventory += 1
             self.become_grateful(giver_index, receiver_index)
 
     @staticmethod
