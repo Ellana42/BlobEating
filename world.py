@@ -1,5 +1,6 @@
 from random import randrange, choice
 from player import Blob
+import numpy as np
 
 
 class Food:
@@ -11,11 +12,16 @@ class Food:
 
 
 class World:
-    def __init__(self, width=10, height=10):
+    def __init__(self, width=10, height=10,
+                 mutation_intensity=0.2, mutation_probability=0.5):
         self.width = width
         self.height = height
+        self.mutation_intensity = mutation_intensity
+        self.mutation_probability = mutation_probability
         self.food = {}
-        self.blobs = {}
+
+        self.blobs = []
+        self.generosity_matrix = np.array([[]])
 
     # Intermediary mvt functions
 
@@ -27,6 +33,9 @@ class World:
 
     def is_on_the_board(self, x, y):
         return x in range(self.width) and y in range(self.height)
+
+    def get_blob_positions(self):
+        return [(blob.x, blob.y) for blob in self.blobs]
 
     def there_is_no_player(self, x, y):
         return (x, y) not in self.get_blob_positions()
@@ -40,9 +49,6 @@ class World:
     def there_is_food(self, x, y):
         return (x, y) in self.food
 
-    def get_blob_positions(self):
-        return [(blob.x, blob.y) for blob in self.blobs.values()]
-
     def get_food_locations(self):
         return self.food.keys()
 
@@ -55,65 +61,104 @@ class World:
                 break
         return x, y
 
-    def random_border_tile(self):
-        w, h = self.width, self.height
-        while True:
-            borders = [(0, randrange(h)), (w - 1, randrange(h)),
-                       (randrange(w), 0), (randrange(w), h - 1)]
-            x, y = choice(borders)
-            if self.tile_is_empty(x, y):
-                return x, y
+    # Cette fonction n'est plus utilisée, en tout cas pour l'instant, parce
+    # qu'on a décidé de faire apparaître les blobs n'importe où sur le plateau
+    # plutôt qu'au bord.
+    # def random_border_tile(self):
+    #     w, h = self.width, self.height
+    #     while True:
+    #         borders = [(0, randrange(h)), (w - 1, randrange(h)),
+    #                    (randrange(w), 0), (randrange(w), h - 1)]
+    #         x, y = choice(borders)
+    #         if self.tile_is_empty(x, y):
+    #             return x, y
 
     def add_food(self, food_quantity):
         for _ in range(food_quantity):
             x, y = self.random_empty_tile()
             self.food[x, y] = Food()
 
-    def self.delete_food() :
-        pass
+    def delete_food(self):
+        self.food = {}
 
+    def stochastify_matrix(self):
+        sum_vector = np.sum(self.generosity_matrix, axis=1)
+        self.generosity_matrix = self.generosity_matrix / sum_vector[:, None]
 
-    def add_blobs(self, nb_blobs):
-        for blob_id in range(nb_blobs):
-            x, y = self.random_border_tile()
-            self.blobs[blob_id] = Blob(x, y, blob_id, self)
+    def add_blobs(self, nb_new_blobs):
+        for _ in range(nb_new_blobs):
+            x, y = self.random_empty_tile()
+            self.blobs.append(Blob(x, y, self))
 
-Class New_world(World):
-       def __init__(self,width=10, height=10):
-            self.width = width
-            self.height = height
-            self.food = {}
-            self.blobs
-            pass
+            # Update generosity_matrix
+            nb_existing_blobs = len(self.blobs)
+            # If this is the first blob added, the generosity_matrix is just
+            # a [[1]]. Doing this prevents a bug.
+            if nb_existing_blobs == 1:
+                self.generosity_matrix = np.array([[1]])
+                continue
+            column = np.zeros((nb_existing_blobs - 1, 1))
+            self.generosity_matrix = np.append(self.generosity_matrix,
+                                               column, axis=1)
+            line = abs(np.random.randn(1, nb_existing_blobs))
+            line = line / np.sum(line)
+            self.generosity_matrix = np.append(self.generosity_matrix,
+                                               line, axis=0)
+        print("generosity_matrix : \n {} \n -----------".format(
+            self.generosity_matrix))
 
-            self.blobs.append(Blob(x,y,self))
-            self.generosity_vector.append()
-            pass
+    @staticmethod
+    def mutation(p):
+        return np.random.choice([True, False], p=[p, 1 - p])
 
-    #Piste : Créer une classe New_world qui hérite de la classe World pour faciliter la mise à jour du plateau ?
-    #Les fonctions ci-dessous sont des méthodes de la nouvelle classe.
+    def duplicate_blob(self, parent):
+        # Testé
 
-    def delete_losers (self, self.inventory):
-         list_blobs = []
-         for blob in self.world.blobs :
-             list_blobs.append(blob)
-         losers = self.world.blobs
-         for blob in self.world.blob
-             if self.inventory<1 :
-                list_blobs.remove(blob)
-     #Objectif : lister tous les joueurs et supprimer à chaque tour ceux qui ont un inventaire vide
-         return list_blobs
+        # New Blob
+        x, y = self.random_empty_tile()
+        new_gratefulness = parent.gratefulness
+        new_vexation = parent.vexation
+        if World.mutation(self.mutation_probability):
+            new_gratefulness *= (1
+                                 + np.random.choice([-1, 1]) * self.mutation_intensity)
+        if World.mutation(self.mutation_probability):
+            new_vexation *= (1
+                             + np.random.choice([-1, 1]) * self.mutation_intensity)
+        new_blob = Blob(x, y, self, gratefulness=new_gratefulness,
+                        vexation=new_vexation)
+        self.blobs.append(new_blob)
+
+        # Update generosity_matrix
+        nb_existing_blobs = len(self.blobs)
+        column = np.zeros((nb_existing_blobs - 1, 1))
+        self.generosity_matrix = np.append(self.generosity_matrix,
+                                           column, axis=1)
+        line = abs(np.random.randn(1, nb_existing_blobs))
+        line = line / np.sum(line)
+        self.generosity_matrix = np.append(self.generosity_matrix,
+                                           line, axis=0)
+
+    def remove_blob(self, blob_index):
+        # On supprime un blob
+        self.blobs.pop(blob_index)
+
+        # On met à jour la matrice de connectivité
+        self.generosity_matrix = np.delete(self.generosity_matrix,
+                                           blob_index, axis=0)
+        self.generosity_matrix = np.delete(self.generosity_matrix,
+                                           blob_index, axis=1)
+        self.stochastify_matrix()
 
     def delete_remaining_blobs_food(self):
-        pass
+        # On supprime la nourriture qu'il reste aux survivants à la fin du tour
+        for blob in self.blobs:
+            blob.inventory = 0
 
-    def update_blobs(self) :
-        pass
-
-    def create_world(self, food_quantity=5, nb_blobs=4):
-        self.add_food(food_quantity)
-        self.add_blobs(nb_blobs)
-
+    # Function replaced by add_blobs(). Food is added at the beginning of each
+    # round.
+    # def create_world(self, food_quantity=5, nb_blobs=4):
+    #     self.add_food(food_quantity)
+    #     self.add_blobs(nb_blobs)
 
     # Movement mechanic
 

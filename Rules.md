@@ -38,8 +38,9 @@ La matrice de connectivité est initialisée, puis évolue comme ça :
 
 ### 4. Reproduction
 1) quand un blob se reproduit, un nouveau blob apparaît
-2) ce nouveau blob a les mêmes caractéristiques (`gratefulness` et `vexation`) que son parent, ± une variation aléatoire, appelée `mutation`.
-3) son vecteur de générosité est réinitialisé ? Ou le même que celui de son parent ? Avec une mutation ? Quelle est sa générosité envers son parent ?
+2) Par défaut, ce nouveau blob a les mêmes caractéristiques (`gratefulness` et `vexation`) que son parent. Toutefois, il y a une probabilité que ces caractéristiques mutent (`mutation_probability`), c'est-à-dire qu'elles soient multipliée par un coefficient appelé `mutation_intensity`.
+3) son vecteur de générosité est réinitialisé ( pour l'instant)
+autres options envisagées : Ou le même que celui de son parent ? Avec une mutation ? Quelle est sa générosité envers son parent ?
 
 ### 5. Règles de déplacement
 Les blobs vont vers la nourriture la plus proche.
