@@ -51,18 +51,17 @@ class Game:
         Display(self.world).display()
 
         for i in range(self.nb_rounds):
-            stats = {}
+            #stats = {}
             self.world.add_food(self.food_quantity)
             print("////// Round number {} /////".format(i))
             self.round()
             self.giving_phase()
             self.deaths_phase()
             self.reproduction_phase()
-            stats['food_left'] = len(self.world.food)
+            #stats['food_left'] = len(self.world.food)
             self.world.delete_food()
             self.world.delete_remaining_blobs_food()
-            self.world.update_blobs()  # update each blobs generosity vector
-            stats = {'nb_blobs': self.nb_blobs,
-                     'gratefulness': [blob.gratefulness for blob in self.world.blobs],
-                     'altruism': [1 - self.world.generosity_matrix[i, i] for i in range(self.nb_blobs)]}
-            self.game_stats.append(stats)
+            # stats = {'nb_blobs': self.nb_blobs,
+            #          'gratefulness': [blob.gratefulness for blob in self.world.blobs],
+            #          'altruism': [1 - self.world.generosity_matrix[i, i] for i in range(self.nb_blobs)]}
+            # self.game_stats.append(stats)

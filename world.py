@@ -87,10 +87,10 @@ class World:
     def add_blobs(self, nb_new_blobs):
         for _ in range(nb_new_blobs):
             x, y = self.random_empty_tile()
-            self.blobs = np.append(self.blobs, Blob(x, y, self)
+            self.blobs = np.append(self.blobs, Blob(x, y, self))
 
             # Update generosity_matrix
-            nb_existing_blobs = len(self.blobs)
+            nb_existing_blobs = self.blobs.size
             # If this is the first blob added, the generosity_matrix is just
             # a [[1]]. Doing this prevents a bug.
             if nb_existing_blobs == 1:
@@ -128,7 +128,7 @@ class World:
         self.blobs = np.append(self.blobs, new_blob)
 
         # Update generosity_matrix
-        nb_existing_blobs = len(self.blobs)
+        nb_existing_blobs = self.blobs.size
         column = np.zeros((nb_existing_blobs - 1, 1))
         self.generosity_matrix = np.append(self.generosity_matrix,
                                            column, axis=1)
@@ -139,7 +139,7 @@ class World:
 
     def remove_blob(self, blob_index):
         # On supprime un blob
-        self.blobs = np.delete(self.blob, blob_index)
+        self.blobs = np.delete(self.blobs, blob_index)
 
         # On met à jour la matrice de connectivité
         self.generosity_matrix = np.delete(self.generosity_matrix,
@@ -161,13 +161,11 @@ class World:
 
     # Movement mechanic
 
-    def move_blob(self, blob_id, direction):
-        if blob_id not in self.blobs:
-            raise Exception('Incorrect blob_icon id !')
-        current_blob = self.blobs[blob_id]  # I get the corresponding blob_icon
-        x, y = current_blob.where_is_arrival(direction)
+    def move_blob(self, blob):
+        direction = blob.direction_choice()
+        x, y = blob.where_is_arrival(direction)
         if self.i_can_move(x, y):
-            current_blob.move(x, y)
+            blob.move(x, y)
         if self.there_is_food(x, y):
-            current_blob.eats(self.food[x, y])
+            blob.eats(self.food[x, y])
             del self.food[x, y]
