@@ -12,6 +12,7 @@ class Game:
         self.nb_turns = nb_turns
         self.nb_rounds = nb_rounds
         self.world = World(self.width, self.height)
+        self.game_stats = []
 
     def round(self):
         for turn in range(self.nb_turns):
@@ -31,7 +32,7 @@ class Game:
     def deaths_phase(self):
         for blob_index, blob in enumerate(self.world.blobs):
             if blob.inventory < 1:
-                world.remove_blob(blob_index)
+                self.world.remove_blob(blob_index)
 
     def reproduction_phase(self):
         for blob_index, blob in enumerate(self.world.blobs):
@@ -56,14 +57,20 @@ class Game:
         Display(self.world).display()
 
         for i in range(self.nb_rounds):
+            stats = {}
             self.world.add_food(self.food_quantity)
             print("////// Round number {} /////".format(i))
             self.round()
             self.giving_phase()
             self.deaths_phase()
             self.reproduction_phase()
-            world.delete_food()
-            world.delete_remaining_blobs_food()
-            world.update_blobs()  # update each blobs generosity vector
+            stats['food_left'] = len(self.world.food)
+            self.world.delete_food()
+            self.world.delete_remaining_blobs_food()
+            self.world.update_blobs()  # update each blobs generosity vector
+            stats = {'nb_blobs': self.nb_blobs,
+                     'gratefulness': [blob.gratefulness for blob in self.world.blobs],
+                     'altruism': [1 - self.world.generosity_matrix[i, i] for i in range(self.nb_blobs)]}
+            self.game_stats.append(stats)
 
         self.score_board()
