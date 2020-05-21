@@ -38,7 +38,7 @@ def plot(stats, chosen_stats=['gratefulness', 'altruism_index', 'altruism_propor
     formatted_stats['food_left'] = [stat['food_left'] for stat in stats]
     rounds = range(len(stats))
 
-    fig, axes = plt.subplots(len(chosen_stats), 1)
+    fig, axes = plt.subplots(len(chosen_stats), 1, figsize=(20, 8))
     fig.subplots_adjust(hspace=2)
     i = 0
     for stat_name, stat in formatted_stats.items():
