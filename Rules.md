@@ -42,5 +42,6 @@ La matrice de connectivité est initialisée, puis évolue comme ça :
 3) son vecteur de générosité est réinitialisé ( pour l'instant)
 autres options envisagées : Ou le même que celui de son parent ? Avec une mutation ? Quelle est sa générosité envers son parent ?
 
+
 ### 5. Règles de déplacement
 Les blobs vont vers la nourriture la plus proche.
