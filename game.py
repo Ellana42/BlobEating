@@ -67,7 +67,7 @@ class Game:
             stats['food_left'] = len(self.world.food)
             self.world.delete_food()
             self.world.delete_remaining_blobs_food()
-            stats.update({'nb_blobs': self.nb_blobs,
+            stats.update({'nb_blobs': len(self.world.blobs),
                           'gratefulness': [blob.gratefulness for blob in self.world.blobs],
                           'altruism': [1 - self.world.generosity_matrix[i, i] for i in range(self.nb_blobs)]})
             self.game_stats.append(stats)

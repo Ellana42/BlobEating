@@ -32,7 +32,7 @@ class Display:
 
 def plot(stats, chosen_stats=['gratefulness', 'altruism_index', 'altruism_proportion', 'nb_blobs', 'food_left']):
     formatted_stats = {}
-    formatted_stats['gratefulness'], formatted_stats['altruism_index'], formatted_stats['altruism_proportion'] = format(
+    formatted_stats['gratefulness'], formatted_stats['altruism_index'] = format(
         stats)
     formatted_stats['nb_blobs'] = [stat['nb_blobs'] for stat in stats]
     formatted_stats['food_left'] = [stat['food_left'] for stat in stats]
@@ -46,6 +46,7 @@ def plot(stats, chosen_stats=['gratefulness', 'altruism_index', 'altruism_propor
         if type(stat) == dict:
             for name_diff_stat, diff_stat in stat.items():
                 axe.plot(rounds, diff_stat, label=name_diff_stat)
+            axe.legend()
         else:
             axe.plot(rounds, stat)
         axe.set_xlabel('rounds')
@@ -85,14 +86,14 @@ def format(stats):
     third_quartile = []
     for stat in stats:
         first_quartile.append(len(
-            [altruism for altruism in stat['altruism'] if altruism < 0.25]))
+            [altruism for altruism in stat['altruism'] if altruism < 0.25]) / stat['nb_blobs'] * 100)
         half_quartile.append(len(
-            [altruism for altruism in stat['altruism'] if altruism < 0.50]))
+            [altruism for altruism in stat['altruism'] if altruism < 0.50]) / stat['nb_blobs'] * 100)
         third_quartile.append(len(
-            [altruism for altruism in stat['altruism'] if altruism < 0.75]))
+            [altruism for altruism in stat['altruism'] if altruism < 0.75]) / stat['nb_blobs'] * 100)
         altruism_proportion = {
             'first_quartile': first_quartile,
             'half_quartile': half_quartile,
             'third_quartile': third_quartile}
 
-    return gratefulness, altruism_index, altruism_proportion
+    return gratefulness, altruism_index
