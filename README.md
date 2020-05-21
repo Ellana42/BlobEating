@@ -62,7 +62,7 @@ reviendrons plus en détail sur ce point lors de la soutenance.
 L'apprentissage sur trois critères de survie
 ============================================
 
-Ici, nous étudions des blobs qui ont plusieures actions possibles : 
+[Ici](https://github.com/Ellana42/Intelligent_Blobs), nous étudions des blobs qui ont plusieures actions possibles : 
 
 * avancer
 * tourner sur eux même
