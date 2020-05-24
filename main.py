@@ -1,5 +1,6 @@
 from game import Game
+from display import plot
 
-Game().game_run()
-
-#print ("bonjour")
+game = Game()
+game.run()
+plot(game.game_stats)
